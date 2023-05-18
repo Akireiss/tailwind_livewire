@@ -1,0 +1,187 @@
+<?php
+
+namespace App\Http\Controllers\Admin;
+
+use App\Models\Category;
+use Illuminate\Support\Str;
+use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\View;
+use Illuminate\View\View as ViewView;
+use App\Http\Requests\CategoryFormRequest;
+
+class CategoryController extends Controller
+{
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     *
+     */
+
+    public function dashboard(){
+        return view('admin.dashboard');
+    }
+    public function index()
+    {
+        //$categories = Category::where('id', '=', 1)->firstOrFail();
+
+       // print_r(Category::avg('name'));
+
+        //passing where with the count function
+        // print_r(Category::where('id', '=', 1)->count());
+
+        //passing all data values from database
+        //  print_r(Category::all()->count());
+        //i pass it to arrray cause it will be passed again in the array table
+        $categories = Category::all();
+        return view('admin.category.index', [
+            'categories' => $categories
+        ]);
+    }
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function create()
+    {
+        return view('admin.category.create');
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store(CategoryFormRequest $request)
+    {
+
+        $validatedData = $request->validated();
+
+        $category = new Category;
+        $category->product_name =  $validatedData['product_name'];
+        $category->description = $validatedData['description'];
+
+
+        if($request->hasFile('image')){
+            $file = $request->file('image');
+            $ext = $file->getClientOriginalExtension();
+            $filename = time() . '.' .$ext;
+            $file->move('uploads/category/', $filename);
+            $category->image =  $filename;
+        }
+
+        $category->price =  $validatedData['price'];
+
+        $category->status = $request->status == true ? '1' : '0';
+
+        $category->save();
+
+        return redirect('admin/category')->with('message', 'Upload Succesfull');
+
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+
+    public function show(Category $category)
+    {
+        return view('admin.category.show', compact('category'));
+
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function edit(CategoryFormRequest $request, $category)
+    {
+
+        $validatedData = $request->validated();
+
+        $category = Category::findOrFail($category);
+
+        $category->product_name =  $validatedData['product_name'];
+        $category->description = $validatedData['description'];
+
+
+        if($request->hasFile('image')){
+
+            $path = 'uploads/category/' . $category->image;
+            if(File::exists($path)){
+                File::delete($path);
+            }
+
+            $file = $request->file('image');
+            $ext = $file->getClientOriginalExtension();
+            $filename = time() . '.' .$ext;
+            $file->move('uploads/category/', $filename);
+            $category->image =  $filename;
+        }
+
+        $category->price =  $validatedData['price'];
+
+        $category->status = $request->status == true ? '1' : '0';
+
+        $category->update();
+
+        return redirect('admin/category')->with('message', 'Update Succesfull');
+
+
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function update(Request $request, $id)
+    {
+        //
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+
+    public function destroy (CategoryFormRequest $request, category $category) {
+        $category->delete();
+        return redirect('admin/category')->with('message', 'Deleted Successfully');
+
+}
+
+}
+
+
+
+/////for CRUD
+    // Route::get('category', [App\Http\Controllers\Admin\CategoryController::class, 'index']);
+
+    // //form and add
+    // Route::get('create', [App\Http\Controllers\Admin\CategoryController::class, 'create']);
+    // Route::post('category/store', [App\Http\Controllers\Admin\CategoryController::class, 'store']);
+
+
+
+    // //show partial
+    // Route::get('category/{category}/show', [App\Http\Controllers\Admin\CategoryController::class, 'show']);
+
+    // //edit partial
+    // Route::put('category/{category}', [App\Http\Controllers\Admin\CategoryController::class, 'edit']);
+
+    // //delete
+    // Route::delete('category/{category}', [CategoryController::class, 'destroy']);

@@ -1,0 +1,43 @@
+What is Enterprise System (ERP)
+-crross functional information system that provides organization wide coordination
+
+Enterprise System
+-are software packages that developed to support many aspect of an enterprise information needs
+
+Enterprise Information System (EIS)
+-is an integrated information system that seeks to integrate every single business process
+
+
+MODERN Enterprise Solution
+Intra Organiazational
+-integration requires the enterprse to build a set of consistent and mutually supportive practices
+
+Inter Organizational
+-integration matched those golals and objectives with the  needs of marker
+
+
+Material Requirement Planning (MRP)
+MRP = Material-centric
+MRP II = Manufacturing Centric
+CRP = Complete Resource Planning
+IFIP = International Federation for information processing
+TC8 = Technical Committer for informatin systems
+
+Lesson 2: Characteristic of Enterprise systems
+Modular Design
+-compose of numerous modules
+
+Integration
+-integrate all information flows
+
+Organiazational Efforts
+= Enterprises often face challenges in integrating their ES software
+
+Business Processcess
+= it helps to integrate organization's busineess operation
+
+Lesson 3: Enterprise System Application In Manufacturing Industry
+
+PIM = Product Information Management
+RM5s = Reconfigurable manufacturing systemsvvv
+
